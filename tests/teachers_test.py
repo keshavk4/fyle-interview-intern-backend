@@ -99,3 +99,23 @@ def test_grade_assignment_draft_assignment(client, h_teacher_1):
     data = response.json
 
     assert data['error'] == 'FyleError'
+
+def test_get_assignments_principal(client):
+    headers = {"X-Principal": '{"user_id": 5, "principal_id": 1}'}
+    response = client.get('/principal/assignments', headers=headers)
+    assert response.status_code == 200
+    assert 'data' in response.json
+
+def test_get_teachers_principal(client):
+    headers = {"X-Principal": '{"user_id": 5, "principal_id": 1}'}
+    response = client.get('/principal/teachers', headers=headers)
+    assert response.status_code == 200
+    assert 'data' in response.json
+
+def test_grade_assignment_principal(client):
+    headers = {"X-Principal": '{"user_id": 5, "principal_id": 1}'}
+    payload = {"id": 1, "grade": "A"}
+    response = client.post('/principal/assignments/grade', headers=headers, json=payload)
+    assert response.status_code == 200
+    assert response.json['data']['grade'] == 'A'
+
